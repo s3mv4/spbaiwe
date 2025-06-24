@@ -1,13 +1,23 @@
+import random
 import json
 import requests
 import subprocess
 import sys
 
-season = int(sys.argv[1])
-episode = int(sys.argv[2])
-
 with open("data.json") as file:
     data = json.load(file)
+
+if len(sys.argv) == 3:
+    season = int(sys.argv[1])
+    episode = int(sys.argv[2])
+else:
+    print("Selecting random episode...")
+    while True:
+        season = random.randint(1, len(data["seasons"])) 
+        episode = random.randint(1, len(data["seasons"][season - 1]))
+        mediagen = data["seasons"][season - 1][episode - 1]["mediagen"] 
+        if mediagen != "":
+            break
 
 if season < 1 or season > len(data["seasons"]):
     print(f"season {season} episode {episode} does not exist!")
